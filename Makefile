@@ -188,8 +188,9 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
-ARCH		?= arm
-CROSS_COMPILE	?= /opt/toolchains/arm-2009q3/bin/arm-none-linux-gnueabi-
+ARCH		?= $(SUBARCH)
+CROSS_COMPILE	?=
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 
 
 # Architecture as present in compile.h
@@ -1120,7 +1121,6 @@ clean: archclean $(clean-dirs)
 	$(call cmd,rmdirs)
 	$(call cmd,rmfiles)
 	@find . $(RCS_FIND_IGNORE) \
-		\( -wholename './fs/rfs' -o -wholename './drivers/fsr' \) -prune -o \
 		\( -name '*.[oas]' -o -name '*.ko' -o -name '.*.cmd' \
 		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
 		-o -name '*.symtypes' -o -name 'modules.order' \
