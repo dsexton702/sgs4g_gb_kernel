@@ -1121,15 +1121,15 @@ static inline int _loop(unsigned dry_run, u8 buf[],
 static inline int _loop_ring(unsigned dry_run, u8 buf[],
 		unsigned long *bursts, const struct _xfer_spec *pxs, int ev)
 {
-	int cyc, off;
-	unsigned lcnt0, lcnt1, ljmp0, ljmp1, ljmpfe;
+	int cyc = 1;
+	int off = 0;
+	static int i;
+	//unsigned lcnt0;
+	unsigned lcnt1 = 256;
+	unsigned ljmp1;
+	unsigned ljmp0;
+	unsigned ljmpfe = off;
 	struct _arg_LPEND lpend;
-
-	off = 0;
-	ljmpfe = off;
-	int i, j;
-	lcnt1 = 256;
-	cyc = 1;
 
 	/* DMAMOV SAR, x->src_addr */
 	off += _emit_MOV(dry_run, &buf[off], SAR, pxs->x->src_addr);
