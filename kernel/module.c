@@ -2121,7 +2121,7 @@ static noinline struct module *load_module(void __user *umod,
 {
 	Elf_Ehdr *hdr;
 	Elf_Shdr *sechdrs;
-	char *secstrings, *args, *modmagic, *strtab = NULL;
+	char *secstrings, *args, *modmagic, *sgsmagic, *strtab = NULL;
 	char *staging;
 	unsigned int i;
 	unsigned int symindex = 0;
@@ -2224,12 +2224,14 @@ static noinline struct module *load_module(void __user *umod,
 	}
 
 	modmagic = get_modinfo(sechdrs, infoindex, "vermagic");
+	/* This string matches the proprietary modules for the KJ6 release. */
+	sgsmagic = "2.6.35.7-T959VUVKJ6-CL694130 preempt mod_unload ARMv7 \0";
 	/* This is allowed: modprobe --force will invalidate it. */
 	if (!modmagic) {
 		err = try_to_force_load(mod, "bad vermagic");
 		if (err)
 			goto free_hdr;
-	} else if (!same_magic(modmagic, vermagic, versindex)) {
+	} else if ((!same_magic(modmagic, vermagic, versindex)) && (!same_magic(modmagic, sgsmagic, versindex))) {
 		printk(KERN_ERR "%s: version magic '%s' should be '%s'\n",
 		       mod->name, modmagic, vermagic);
 		err = -ENOEXEC;
