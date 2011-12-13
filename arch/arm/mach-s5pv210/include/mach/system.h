@@ -16,6 +16,8 @@
 #include <asm/proc-fns.h>
 #include <plat/watchdog-reset.h>
 
+static void arch_idle(void) __maybe_unused;
+
 static void arch_idle(void)
 {
 	/* nothing here yet */

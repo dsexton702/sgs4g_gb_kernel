@@ -295,6 +295,7 @@ void s3c_pm_do_restore_core(struct sleep_save *ptr, int count)
  *
  * print any IRQs asserted at resume time (ie, we woke from)
 */
+/*
 static void s3c_pm_show_resume_irqs(int start, unsigned long which,
 				    unsigned long mask)
 {
@@ -308,6 +309,7 @@ static void s3c_pm_show_resume_irqs(int start, unsigned long which,
 		}
 	}
 }
+*/
 
 bool s3c_pm_check_pending_interrupt(void)
 {
@@ -366,7 +368,7 @@ static int s3c_pm_enter(suspend_state_t state)
 	/* 20110210 - check pending interrupt to wakeup device */
 	if(!s3c_pm_check_pending_interrupt())
 	{
-		printk(KERN_ERR "interrupt pending. wakeup!!(1)\n", __func__);	
+		printk(KERN_ERR "%s: interrupt pending. wakeup!!(1)\n", __func__);
 		return -EINVAL;
 	}
 #if ! defined (CONFIG_S5PC110_HAWK_BOARD) 	
@@ -383,7 +385,7 @@ static int s3c_pm_enter(suspend_state_t state)
 	/* 20110210 - check pending interrupt to wakeup device */
 	if(!s3c_pm_check_pending_interrupt())
 	{
-		printk(KERN_ERR "interrupt pending. wakeup!!(2)\n", __func__);	
+		printk(KERN_ERR "%s: interrupt pending. wakeup!!(2)\n", __func__);
 		return -EINVAL;
 	}
 

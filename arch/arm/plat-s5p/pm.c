@@ -24,11 +24,11 @@
  * check to see if the pin is configured correctly for sleep mode, and
  * make any necessary adjustments if it is not
 */
-
+/*
 static void s3c_pm_check_resume_pin(unsigned int pin, unsigned int irqoffs)
-{
+{ */
 	/* nothing here yet */
-}
+/* } */
 
 /* s3c_pm_configure_extint
  *

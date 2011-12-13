@@ -7505,6 +7505,9 @@ void __init sched_init(void)
 {
 	int i, j;
 	unsigned long alloc_size = 0, ptr;
+	unsigned short *checksum;
+	unsigned char *memory;
+	unsigned char address;
 
 	/*
 	 *  Add GAForensic init for preventing symbol removal for optimization. (tkhwang)
@@ -7517,9 +7520,8 @@ void __init sched_init(void)
 		GAFINFO.cfs_rq_struct_rq_struct=0x1224;
 	#endif 
 
-	unsigned short *checksum	=	&(GAFINFO.GAFINFOCheckSum);
-	unsigned char  *memory		=	&GAFINFO;
-	unsigned char	address;
+	checksum = &(GAFINFO.GAFINFOCheckSum);
+	memory = &GAFINFO;
 	for (*checksum = 0, address = 0; address < (sizeof(GAFINFO) - sizeof(GAFINFO.GAFINFOCheckSum)); address++) {
 		if ((*checksum) & 0x8000)
 			(*checksum) = (((*checksum) << 1) | 1 ) ^ memory[address];
