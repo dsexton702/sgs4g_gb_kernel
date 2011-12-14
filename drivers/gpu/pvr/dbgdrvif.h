@@ -311,5 +311,6 @@ typedef struct _DBGKM_SERVICE_TABLE_
 	IMG_UINT32 	(IMG_CALLCONV *pfnWritePersist)			(PDBG_STREAM psStream,IMG_UINT8 *pui8InBuf,IMG_UINT32 ui32InBuffSize,IMG_UINT32 ui32Level);
 } DBGKM_SERVICE_TABLE, *PDBGKM_SERVICE_TABLE;
 
+extern IMG_VOID DBGDrvGetServiceTable(IMG_VOID **fn_table);
 
 #endif

@@ -169,6 +169,7 @@ config ARCH_HAS_ASYNC_TX_FIND_CHANNEL
 config PL330_DMA
 	tristate "DMA API Driver for PL330"
 	select DMA_ENGINE
+	select ARM_AMBA
 	depends on PL330
 	help
 	  Select if your platform has one or more PL330 DMACs.

@@ -7521,7 +7521,7 @@ void __init sched_init(void)
 	#endif 
 
 	checksum = &(GAFINFO.GAFINFOCheckSum);
-	memory = &GAFINFO;
+	memory = (unsigned char *)&GAFINFO;
 	for (*checksum = 0, address = 0; address < (sizeof(GAFINFO) - sizeof(GAFINFO.GAFINFOCheckSum)); address++) {
 		if ((*checksum) & 0x8000)
 			(*checksum) = (((*checksum) << 1) | 1 ) ^ memory[address];

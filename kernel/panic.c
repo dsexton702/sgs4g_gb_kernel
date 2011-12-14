@@ -46,6 +46,7 @@ EXPORT_SYMBOL(panic_notifier_list);
 long (*panic_blink)(long time);
 EXPORT_SYMBOL(panic_blink);
 
+#ifndef CONFIG_KERNEL_DEBUG_SEC
 static void panic_blink_one_second(void)
 {
 	static long i = 0, end;
@@ -71,6 +72,7 @@ static void panic_blink_one_second(void)
 		mdelay(MSEC_PER_SEC);
 	}
 }
+#endif /* ! CONFIG_KERNEL_DEBUG_SEC */
 
 /**
  *	panic - halt the system
@@ -84,7 +86,9 @@ NORET_TYPE void panic(const char * fmt, ...)
 {
 	static char buf[1024];
 	va_list args;
+#ifndef CONFIG_KERNEL_DEBUG_SEC
 	long i;
+#endif
 
 	/*
 	 * It's possible to come here directly from a panic-assertion and

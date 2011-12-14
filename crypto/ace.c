@@ -576,6 +576,7 @@ static int s5p_ace_aes_engine_start(struct s5p_ace_aes_ctx *sctx,
 	return 0;
 }
 
+#if defined(CONFIG_ACE_SWAES_FOR_SMALLBLOCK)
 static void s5p_ace_aes_engine_wait(struct s5p_ace_aes_ctx *sctx,
 				u8 *out, const u8 *in, u32 len)
 {
@@ -583,6 +584,7 @@ static void s5p_ace_aes_engine_wait(struct s5p_ace_aes_ctx *sctx,
 		;	/* wait */
 	s5p_ace_write_sfr(ACE_FC_INTPEND, ACE_FC_BTDMA | ACE_FC_BRDMA);
 }
+#endif
 
 #if defined(CONFIG_ACE_AES_SINGLE_BLOCK) || !defined(CONFIG_ACE_BC_ASYNC)
 static int s5p_ace_aes_run_engine(struct s5p_ace_aes_ctx *sctx,
@@ -1946,7 +1948,10 @@ static int __init s5p_ace_probe(struct platform_device *pdev)
 #if defined(CONFIG_ACE_USE_ACP)
 	void __iomem *ace_sss_user_con;
 #endif
-	int i, j, k;
+	int i, k;
+#if defined(CONFIG_ACE_HASH)
+	int j;
+#endif
 	int ret;
 
 	memset(s5p_adt, 0, sizeof(*s5p_adt));
