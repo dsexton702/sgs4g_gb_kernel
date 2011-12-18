@@ -358,7 +358,7 @@ void universal_sdhci2_cfg_ext_cd(void)
 	set_irq_type(IRQ_EINT(28), IRQ_TYPE_EDGE_BOTH);
 }
 
-#ifdef CONFIG_S3C_DEV_HSMMC0
+#ifdef CONFIG_S3C_DEV_HSMMC
 static struct s3c_sdhci_platdata hsmmc0_platdata = {
 #if defined(CONFIG_S5PV210_SD_CH0_8BIT)
 	.max_width	= 8,
@@ -369,7 +369,7 @@ static struct s3c_sdhci_platdata hsmmc0_platdata = {
 	.get_ro         = sdhci0_get_ro,
 #endif
 };
-#endif /* CONFIG_S3C_DEV_HSMMC0 */
+#endif /* CONFIG_S3C_DEV_HSMMC */
 
 #if defined(CONFIG_S3C_DEV_HSMMC2)
 static struct s3c_sdhci_platdata hsmmc2_platdata = {
@@ -386,7 +386,7 @@ static struct s3c_sdhci_platdata hsmmc3_platdata = { 0 };
 
 void s3c_sdhci_set_platdata(void)
 {
-#if defined(CONFIG_S3C_DEV_HSMMC0)
+#if defined(CONFIG_S3C_DEV_HSMMC)
 	s3c_sdhci0_set_platdata(&hsmmc0_platdata);
 #endif
 #if defined(CONFIG_S3C_DEV_HSMMC2)
