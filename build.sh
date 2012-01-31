@@ -2,7 +2,8 @@
 
 set -x
 
-INITRAMFS="/home/bryan/kj6kernel/initramfs_root/"
+INITRAMFS_REAL="/home/bryan/cm7sgs4g/sgs4g_gb_initramfs"
+INITRAMFS="/tmp/sgs4g_gb_initramfs"
 
 setup ()
 {
@@ -14,7 +15,6 @@ setup ()
 
     KERNEL_DIR="$(dirname "$(readlink -f "$0")")"
     BUILD_DIR="$KERNEL_DIR/build"
-    MODULES=$(find ${BUILD_DIR} -name '*.ko')
 
     if [ x = "x$NO_CCACHE" ] && ccache -V &>/dev/null ; then
         CCACHE=ccache
@@ -35,6 +35,8 @@ build ()
     echo "Building for $target"
     local target_dir="$BUILD_DIR/$target"
     local module
+    cp -rf ${INITRAMFS_REAL} ${INITRAMFS}
+    rm -rf ${INITRAMFS}/.git
     rm -fr "$target_dir"
     #mkdir -p "$target_dir/usr"
     mkdir -p "$target_dir"
@@ -42,23 +44,12 @@ build ()
     #sed "s|usr/|$KERNEL_DIR/usr/|g" -i "$target_dir/usr/"*.list
     mka -C "$KERNEL_DIR" O="$target_dir" ARCH=arm aries_${target}_defconfig CONFIG_INITRAMFS_SOURCE="${INITRAMFS}" HOSTCC="$CCACHE gcc"
     mka -C "$KERNEL_DIR" O="$target_dir" ARCH=arm HOSTCC="$CCACHE gcc" CONFIG_INITRAMFS_SOURCE="${INITRAMFS}" CROSS_COMPILE="$CCACHE $CROSS_PREFIX" zImage modules
-    WHEREWASI="$(pwd)"
-    cd "${INITRAMFS}"
-    mkdir tmp
-    cd tmp
-    unlzma -c ../compressed_voodoo_initramfs.tar.lzma | tar xf -
-    cd ${WHEREWASI}
-    cp ${MODULES} ${INITRAMFS}tmp/lib/modules/
-    cd ${INITRAMFS}tmp
-    tar cf ../compressed_voodoo_initramfs.tar *
-    cd ..
-    rm -rf ${INITRAMFS}compressed_voodoo_initramfs.tar.lzma ${INITRAMFS}tmp
-    lzma compressed_voodoo_initramfs.tar
-    cd ${WHEREWASI}
+    cp $(find ${BUILD_DIR} -name '*.ko') ${ANDROID_BUILD_TOP}/device/samsung/${target}/modules/
+    cp $(find ${BUILD_DIR} -name '*.ko') ${INITRAMFS}/lib/modules/
+    cp $(find ${BUILD_DIR} -name '*.ko') ${INITRAMFS_REAL}/lib/modules/
     rm -rf ${target_dir}/usr/{built-in.o,initramfs_data.{o,cpio*}}
     mka -C "$KERNEL_DIR" O="$target_dir" ARCH=arm HOSTCC="$CCACHE gcc" CONFIG_INITRAMFS_SOURCE="${INITRAMFS}" CROSS_COMPILE="$CCACHE $CROSS_PREFIX" zImage
     cp "$target_dir"/arch/arm/boot/zImage $ANDROID_BUILD_TOP/device/samsung/$target/kernel
-    cp ${MODULES} ${ANDROID_BUILD_TOP}/device/samsung/$target
 }
     
 setup
